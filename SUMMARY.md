@@ -16,3 +16,4 @@
 
 * [2.0 실습 개요](2/2.0.md)
 * [2.1 cbworkloadgen Tool 활용](2/2.1-cbworkloadgen-tool.md)
+* [2.2 애플리케이션 클라이언트 구성](2/2.2.md)
