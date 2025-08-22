@@ -15,3 +15,4 @@
 ## 모듈 2 - 버킷 관리 및 도구
 
 * [2.0 실습 개요](2/2.0.md)
+* [2.1 cbworkloadgen Tool 활용](2/2.1-cbworkloadgen-tool.md)
