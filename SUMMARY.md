@@ -7,3 +7,4 @@
 * [1.3 단일 노드 Couchbase 클러스터 구성](1.3-couchbase.md)
 * [1.4 Couchbase 웹 UI 탐색](1.4-couchbase-ui.md)
 * [1.5 Couchbase CLI(cmd-line interface) 탐색](1.5-couchbase-cli-cmd-line-interface.md)
+* [1.6 Couchbase 인덱스 및 데이터 디렉토리 탐색](1.6-couchbase.md)
