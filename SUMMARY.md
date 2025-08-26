@@ -17,3 +17,8 @@
 * [2.0 실습 개요](2/2.0.md)
 * [2.1 cbworkloadgen Tool 활용](2/2.1-cbworkloadgen-tool.md)
 * [2.2 애플리케이션 클라이언트 구성](2/2.2.md)
+* [2.3 애플리케이션 클라이언트에서 cbworkloadgen을 실행](2/2.3-cbworkloadgen.md)
+
+## 모듈 3 - 클러스터를 6개의 노드로 확장
+
+* [3.0 실습 개요](3-6/3.0.md)
