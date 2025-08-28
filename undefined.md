@@ -1,0 +1,189 @@
+# 클러스터에 노드 추가
+
+## Rack/가용 영역(Rack/Availability-Zone) 인식이란 무엇입니까?
+
+Couchbase 엔터프라이즈 에디션의 Rack Awareness 기능은 클러스터 내 서버들을 논리적으로 그룹화하여 각 서버 그룹이 물리적으로 특정 랙(Rack)이나 클라우드 가용 영역(Availability Zone)에 속하도록 합니다. 올바르게 구성되면 관리자는 활성 파티션과 그에 해당하는 복제 파티션이 서로 다른 랙이나 가용 영역에 있는 서버에 생성되도록 지정할 수 있습니다.
+
+따라서 특정 랙 전체에 장애가 발생해도 복제 파티션이 다른 랙에 존재하기 때문에 데이터는 계속해서 사용 가능합니다.
+
+서버 그룹 간에 가능한 서버 수를 동일하게 유지하는 것이 권장됩니다. 만약 한 서버 그룹의 서버 수가 불균형해지면, 재조정(Rebalance) 작업 시 복제 vBucket을 클러스터 전체에 최대한 고르게 분산시키는 방식으로 처리됩니다.
+
+이 섹션에서는 Web UI를 사용해 그룹 1에 두 번째 노드를 클러스터에 추가하는 방법을 다룹니다. 이후 섹션에서는 couchbase-cli 도구를 사용해 그룹 2에 세 번째와 네 번째 노드를 추가하는 방법을 설명합니다.
+
+
+
+## 1. Web UI를 사용하여 클러스터에 두 번째 노드를 추가합니다.
+
+노드 #1에서 실행 중인 Couchbase Server Web UI에 접속한 후, 왼쪽 메뉴에서 Server Nodes를 클릭하고 `Add Server`를 클릭합니다:
+
+```
+http://<1번 VM의 퍼블릭 호스트이름>:8091
+```
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+
+
+Hostname/IP Address 필드에 Cluster-IPs 스프레드시트에 있는 노드 #2의 퍼블릭 호스트 이름을 입력합니다.
+
+{% hint style="info" %}
+복사하여 붙여넣기 한 경우, 앞에 공백이 없는지 반드시 확인하십시오.
+{% endhint %}
+
+또한 username에는 `Administrator`를, password에는 `couchbase`를 입력합니다.
+
+마지막으로 Data service 체크박스를 선택하고(노드 2, 3, 4의 경우 다른 서비스는 선택 해제), `Add Server`를 클릭합니다.
+
+<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+
+
+{% hint style="info" %}
+이 노드가 클러스터에 합류하면 이전에 존재하던 모든 데이터가 손실될 것이라는 경고가 표시됩니다.
+{% endhint %}
+
+\
+서버 탭에 빨간색으로 ADD pending rebalance가 표시된 새 서버가 보이면, 해당 서버가 클러스터에 성공적으로 추가된 것입니다.
+
+<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+
+
+## 2. Couchbase-cli 도구를 사용하여 세 번째 클러스터를 추가합니다.
+
+이 섹션에서는 `Couchbase-cli` 도구를 사용하여 클러스터에 추가 노드를 추가합니다.\
+따라서 세 번째 노드는 새로운 서버 그룹 #2에 추가하고, 네 번째 노드는 WebUI를 사용하여 추가할 예정입니다.
+
+
+
+## 2.1 서버 그룹 추가
+
+여전히 Couchbase Web UI에 로그인한 상태에서, 먼저 `Groups`를 클릭하여 새로운 서버 그룹을 생성합니다.
+
+<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+다음 페이지에서 `Add Group`을 클릭합니다.
+
+<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+팝업 창에서 `Group 2`를 입력하고 `Add Group` 버튼을 클릭합니다.
+
+<div align="left"><figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure></div>
+
+
+
+이제 빈 `Group 2`가 표시될 것입니다.
+
+<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+
+
+## 2.2. Add the third node using couchbase-cli
+
+Go to the 1st node’s PuTTY shell (dark blue window):
+
+<div align="left"><figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure></div>
+
+
+
+```
+[ec2-user@Couchbase01 ~] cd ~
+```
+
+
+
+다음으로, 세 번째 노드를 추가하기 위한 couchbase-cli 명령을 구성해야 합니다. 실행할 명령은 아래 예시와 동일하지만, 초록색으로 강조된 부분은 수정해야 합니다.
+
+아래는 예시입니다.
+
+```
+/opt/couchbase/bin/couchbase-cli server-add \
+   --server-add="ec2-54-173-46-5.compute-1.amazonaws.com" \
+   --server-add-username=Administrator \
+   --server-add-password=couchbase     \
+   --group-name="Group 2" \
+   --services="data" \
+   --cluster="ec2-54-174-65-105.compute-1.amazonaws.com:8091" \
+   --username=Administrator \
+   --password=couchbase
+```
+
+`–server-add` 값은 추가하려는 세 번째 서버의 퍼블릭 호스트 이름으로 바꿔야 합니다.
+
+`–services` 값은 이 노드에서 제공하려는 서비스로 바꿔야 합니다.
+
+`–cluster` 값은 첫 번째 서버의 퍼블릭 호스트 이름으로 바꿔야 합니다.
+
+위 명령에서는 세 번째 노드를 서버 그룹 2에 추가하고 있습니다.
+
+위에서 작성한 명령을 실행합니다. (명령에 들어가는 퍼블릭 호스트 이름은 각자 환경에 맞게 다르게 입력해야 합니다!)
+
+
+
+```
+[ec2-user@Couchbase01 ~]$ couchbase-cli server-add \
+    --server-add=$NODE3 \
+    --server-add-username=Administrator \
+    --server-add-password=couchbase \
+    --group-name="Group 2" \
+    --services="data" \
+    --cluster=$NODE1:8091
+```
+
+```
+SUCCESS: Server added
+```
+
+
+
+명령이 성공적으로 실행되면, 위와 같이 성공 메시지가 표시됩니다.
+
+{% hint style="info" %}
+REST API를 사용할 때 join 명령은 다음과 같은 형태입니다. 이 명령은 단지 참고용이며, 실제로 입력하지 마십시오.\
+
+
+`curl -u admin:password -d clusterMemberHostIp=192.168.0.1`\
+`-d clusterMemberPort=8091`\
+`-d user=admin -d password=password`\
+`http://localhost:8091/node/controller/doJoinCluster`
+
+
+
+You’d have to replace the admin, password, and 192.168.0.1 values in the above example with your actual values. For further information see https://docs.couchbase.com/server/current/rest-api/rest-node-services.html
+
+
+{% endhint %}
+
+
+
+## 3..Web UI를 사용하여 네 번째 노드 추가
+
+### 3.1. 웹 브라우저를 사용하여 네 번째 노드에 접속합니다.
+
+다음으로 브라우저에서 노드 4에 접속하여 설정 시작 화면을 띄웁니다. 이때 포트 8091을 사용합니다.
+
+http://\<node4 주소>:8091
+
+
+
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+Join Existing Cluster를 선택합니다.
+
+
+
+### 3.2. 클러스터에 조인하기 위해 필요한 정보를 입력합니다.
+
+\
+클러스터와 조인할 노드 이름 모두 Amazon EC2 주소를 사용해야 합니다.
+
+Data service를 선택하고, 다른 서비스는 선택 해제합니다.
+
+인덱스 경로는 `/opt/couchbase/var/lib/couchbase/indexes`로 수정합니다.
+
+<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+`Join With Custom Configuration`을 클릭합니다.
+
+
+
