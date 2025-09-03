@@ -1,5 +1,7 @@
 # Couchbase Server Administration
 
+Version: 1.0 (2025-09-03)
+
 Couchbase Server Administration 한국어 Workshop에 오신 것을 환영합니다.
 
 
