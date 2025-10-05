@@ -14,7 +14,8 @@
 
 ## RAG(검색, 증강, 생성)&#x20;
 
-* [1. RAG(검색, 증강, 생성) 실습](rag/1.-rag.md)
+* [1. Scope, Collection, Vector index 생성](rag/1.-scope-collection-vector-index.md)
+* [2. Couchbase + LangChain + OPEN AI로 RAG 구현 실습](rag/2.-couchbase-+-langchain-+-open-ai-rag.md)
 
 ## AI Agent
 
