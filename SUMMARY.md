@@ -19,4 +19,4 @@
 
 ## AI Agent
 
-* [Page 1](ai-agent/page-1.md)
+* [1. AI Agent 실습 사전 준비](ai-agent/1.-ai-agent.md)
