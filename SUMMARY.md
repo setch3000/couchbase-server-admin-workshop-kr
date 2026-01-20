@@ -6,7 +6,8 @@
 
 * [1. Couchbase Capella 클러스터 생성](couchbase/1.-couchbase-capella.md)
 * [2. 데이터 도구로 샘플 데이터 탐색하기](couchbase/2..md)
-* [3. Couchbase Python SDK 활용](couchbase/3.-couchbase-python-sdk.md)
+* [3. Query 최적화](couchbase/3.-query.md)
+* [4. Couchbase Python SDK 활용](couchbase/4.-couchbase-python-sdk.md)
 
 ## Vector Search
 
