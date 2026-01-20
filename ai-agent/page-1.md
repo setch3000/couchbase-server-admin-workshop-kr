@@ -30,7 +30,7 @@ Data Tools 탭에서 좌즉의 Create 버튼을 클릭합니다.
 
 
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
